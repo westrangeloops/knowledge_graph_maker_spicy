@@ -1,6 +1,6 @@
 from groq import Groq, GroqError
 from ..types import LLMClient
-
+import os
 
 
 class GroqClient(LLMClient):
@@ -14,8 +14,12 @@ class GroqClient(LLMClient):
         self._temperature = temperature
         self._top_p = top_p
         try:
-            self._client = Groq()
-        except GroqError as e: 
+            self._client = Groq(
+                api_key=os.environ.get(
+                    "GROQ_API_KEY"
+                )  # Ensure your API key is set as an environment variable
+            )
+        except GroqError as e:
             print(e)
             self._client = None
 
